@@ -1,6 +1,6 @@
 #include "processo.hpp"
 
-processo::processo(int id, int tempoChegada, int tempoDuracao){
+Processo::Processo(int id, int tempoChegada, int tempoDuracao){
 
     this->id = id;
     this->tempoChegada = tempoChegada;
@@ -9,6 +9,8 @@ processo::processo(int id, int tempoChegada, int tempoDuracao){
     this->tempoRetorno = 0;
     this->tempoResposta = 0;
     this->tempoEspera = 0;
-    this->tempoExecutado = 0;
+    this->tempoProcessado = 0;
 
 }
+
+Processo::~Processo(){;}

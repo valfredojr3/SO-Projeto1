@@ -1,10 +1,11 @@
 /*  Aluno: Valfredo Santos Júnior
     Matricula: 115040304  */
 
-#include <iostream>
 #include <fstream>
 #include <iomanip>
+
 #include "processo.hpp"
+#include "escalonador.hpp"
 
 /*  Função CriaLista recebe como parâmetro um endereço para o arquivo de entrada
     aberto no main, cria uma lista de objetos do tipo Processo com base na
@@ -12,7 +13,7 @@
 std::vector <Processo> CriaLista(const char* inputfile){
 
     std::ifstream file;
-    file.open(str, std::ios::in);
+    file.open(inputfile, std::ios::in);
 
     int id = 1;
     std::vector <Processo> listaProcesso;
@@ -24,7 +25,7 @@ std::vector <Processo> CriaLista(const char* inputfile){
         file >> tempoChegada;
         file >> tempoDuracao;
 
-        Process auxProcesso(id, tempoChegada, tempoDuracao);
+        Processo auxProcesso(id, tempoChegada, tempoDuracao);
         listaProcesso.push_back(auxProcesso);
 
         id++;
@@ -45,13 +46,11 @@ int main(){
 
     std::cout << std::fixed << std::setprecision(1);
 
-    std::vector <Processo> listaProcesso = ("input.txt");
+    std::vector <Processo> listaProcesso = CriaLista("input.txt");
 
-    Scheduler fcfs, sjf, rr;
+    Escalonador fcfs, sjf, rr;
 
     fcfs.FCFS(listaProcesso);
-    sjf.SJF(listaProcesso);
-    rr.RR(listaProcesso);
 
     return 0;
 }

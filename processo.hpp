@@ -15,8 +15,7 @@ class Processo{
           tempoEspera,
           tempoRetorno,
           tempoResposta,
-          tempoEspera,
-          tempoExecutado;
+          tempoProcessado;
 
 };
 
