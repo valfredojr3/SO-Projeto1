@@ -1,47 +1,57 @@
+/*  Aluno: Valfredo Santos Júnior
+    Matricula: 115040304  */
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include "process.hpp"
+#include "processo.hpp"
 
-std::vector <Process> GetInput(const char* inputfile){
+/*  Função CriaLista recebe como parâmetro um endereço para o arquivo de entrada
+    aberto no main, cria uma lista de objetos do tipo Processo com base na
+    entrada, e retorna essa lista.  */
+std::vector <Processo> CriaLista(const char* inputfile){
 
     std::ifstream file;
     file.open(str, std::ios::in);
 
     int id = 1;
-    std::vector <Process> processList;
+    std::vector <Processo> listaProcesso;
 
     while(file.good()){
 
-        int processArrivalTime, processDurationtime;
+        int tempoChegada, tempoDuracao;
 
-        file >> processArrivalTime;
-        file >> processDurationtime;
+        file >> tempoChegada;
+        file >> tempoDuracao;
 
-        Process newProcess(id, processStartTime, processDurationtime);
-        processList.push_back(newProcess);
+        Process auxProcesso(id, tempoChegada, tempoDuracao);
+        listaProcesso.push_back(auxProcesso);
 
-        ++id;
+        id++;
 
     }
 
     file.close();
 
-    return processList;
+    return listaProcesso;
 
 }
 
+/*  O main define a precisão do cout de casa decimal para um, faz a criação da
+    lista de processos com base na entrada, cria três objetos da classe Scheduler
+    e então chama uma função para cada algoritmo de escalonamento, passando a
+    lista de processos como parâmetro */
 int main(){
 
     std::cout << std::fixed << std::setprecision(1);
 
-    std::vector <Process> processList = getProcessList("input.txt");
+    std::vector <Processo> listaProcesso = ("input.txt");
 
     Scheduler fcfs, sjf, rr;
 
-    fcfs.FCFS(processList);
-    sjf.SJF(processList);
-    rr.RR(processList);
+    fcfs.FCFS(listaProcesso);
+    sjf.SJF(listaProcesso);
+    rr.RR(listaProcesso);
 
     return 0;
 }
