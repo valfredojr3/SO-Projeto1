@@ -1,2 +1,2 @@
-scheduler:*.cpp
-	g++ -std=c++11 *.cpp -o scheduler
+escalonador:*.cpp
+	g++ -std=c++11 *.cpp -o escalonador
