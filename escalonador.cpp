@@ -202,7 +202,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
 	/* Se o processo estiver precisando de menos do que o valor de quantum
            para terminar de ser processado, aumentar adequadamente os valores
            de tempo executado e tempo processado */
-        if((aux.tempoDuracao - aux.tempoProcessado) < 2){
+        if((aux.tempoDuracao - aux.tempoProcessado) < quantum){
 
             tempoExecutado += (aux.tempoDuracao - aux.tempoProcessado);
             aux.tempoProcessado += (aux.tempoDuracao - aux.tempoProcessado);
@@ -210,8 +210,8 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
 	/* Senao, apenas processe o tempo de quantum desse processo */
         }else{
 
-            aux.tempoProcessado += 2;
-            tempoExecutado += 2;
+            aux.tempoProcessado += quantum;
+            tempoExecutado += quantum;
 
         }
 

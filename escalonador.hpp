@@ -7,6 +7,8 @@
 #include "processo.hpp"
 #include <limits.h>
 
+#define quantum 2
+
 class Escalonador{
 
     public:
