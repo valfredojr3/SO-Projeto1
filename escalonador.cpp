@@ -1,6 +1,5 @@
 #include "escalonador.hpp"
 
-
 /* Construtor do Escalonador que inicia os atributos em 0 */
 Escalonador::Escalonador(){
 
@@ -30,7 +29,6 @@ bool ComparaProcessoDuracao(Processo p1, Processo p2){
    resultados com cout */
 void Escalonador::FCFS(std::vector <Processo> listaProcesso){
 
-    //Variáveis utilizadas para calcular o tempo total e ao fim gerar a média
     int tempoRetornoTotal = 0;
     int tempoRespostaTotal = 0;
     int tempoEsperaTotal = 0;
@@ -158,6 +156,7 @@ void Escalonador::SJF(std::vector <Processo> listaProcesso){
    espera médio, salva esses valores nos atributos da classe e imprime esses
    resultados com cout */
 void Escalonador::RR(std::vector <Processo> listaProcesso){
+
     int tempoRetornoTotal = 0;
     int tempoRespostaTotal = 0;
     int tempoEsperaTotal = 0;
