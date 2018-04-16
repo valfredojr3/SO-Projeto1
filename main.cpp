@@ -38,8 +38,8 @@ std::vector <Processo> CriaLista(const char* inputfile){
 
 }
 
-/*  O main define a precisão do cout de casa decimal para um, faz a criação da
-    lista de processos com base na entrada, cria três objetos da classe Scheduler
+/*  O main define a precisão da casa decimal para um, faz a criação da
+    lista de processos com base na entrada, cria três objetos da classe Escalonador
     e então chama uma função para cada algoritmo de escalonamento, passando a
     lista de processos como parâmetro */
 int main(){
@@ -51,6 +51,8 @@ int main(){
     Escalonador fcfs, sjf, rr;
 
     fcfs.FCFS(listaProcesso);
+    sjf.SJF(listaProcesso);
+    rr.RR(listaProcesso);
 
     return 0;
 }

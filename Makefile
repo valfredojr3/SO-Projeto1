@@ -1,2 +1,2 @@
 escalonador:*.cpp
-	g++ -std=c++11 *.cpp -o escalonador
+	g++ -std=c++14 *.cpp -o escalonador
