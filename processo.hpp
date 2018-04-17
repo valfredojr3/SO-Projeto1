@@ -12,9 +12,6 @@ class Processo{
       int id,
           tempoChegada,
           tempoDuracao,
-          tempoEspera,
-          tempoRetorno,
-          tempoResposta,
           tempoProcessado;
 
 };
