@@ -15,7 +15,6 @@ std::vector <Processo> CriaLista(const char* inputfile){
     std::ifstream file;
     file.open(inputfile, std::ios::in);
 
-    int id = 1;
     std::vector <Processo> listaProcesso;
 
     while(file.good()){
@@ -25,10 +24,8 @@ std::vector <Processo> CriaLista(const char* inputfile){
         file >> tempoChegada;
         file >> tempoDuracao;
 
-        Processo auxProcesso(id, tempoChegada, tempoDuracao);
+        Processo auxProcesso(tempoChegada, tempoDuracao);
         listaProcesso.push_back(auxProcesso);
-
-        id++;
 
     }
 

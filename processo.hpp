@@ -5,12 +5,11 @@ class Processo{
 
   public:
 
-      Processo(int id, int tempoChegada, int tempoDuracao);
+      Processo(int tempoChegada, int tempoDuracao);
 
       ~Processo();
 
-      int id,
-          tempoChegada,
+      int tempoChegada,
           tempoDuracao,
           tempoProcessado;
 
