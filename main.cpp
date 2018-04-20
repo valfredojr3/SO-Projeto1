@@ -1,5 +1,5 @@
 /*  Aluno: Valfredo Santos Júnior
-    Matricula: 115040304  */
+    Matrícula: 115040304  */
 
 #include <fstream>
 #include <iomanip>
@@ -7,9 +7,9 @@
 #include "processo.hpp"
 #include "escalonador.hpp"
 
-/*  Função CriaLista recebe como parâmetro um endereço para o arquivo de entrada
-    aberto no main, cria uma lista de objetos do tipo Processo com base na
-    entrada, e retorna essa lista.  */
+/*  Função CriaLista recebe como parâmetro um nome de arquivo de entrada,
+    cria uma lista de objetos do tipo Processo com base na entrada, e retorna
+    essa lista.  */
 std::vector <Processo> CriaLista(const char* inputfile){
 
     std::ifstream file;

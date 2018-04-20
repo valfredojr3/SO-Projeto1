@@ -22,11 +22,7 @@ bool ComparaProcessoDuracao(Processo p1, Processo p2){
         return (p1.tempoDuracao < p2.tempoDuracao);
 }
 
-/* Método do algoritmo de escalonamento FCFS (First-Come First Served), recebe
-   uma lista de objetos do tipo Processo, trabalha em cima dos dados, e ao fim
-   gera os valores de tempo de resposta médio, tempo de retorno médio e tempo de
-   espera médio, salva esses valores nos atributos da classe e imprime esses
-   resultados com cout */
+/* Método do algoritmo de escalonamento FCFS (First-Come First Served) */
 void Escalonador::FCFS(std::vector <Processo> listaProcesso){
 
     int tempoRetornoTotal = 0;
@@ -35,22 +31,23 @@ void Escalonador::FCFS(std::vector <Processo> listaProcesso){
     int tempoExecutado = 0;
     const int numProcessos = listaProcesso.size();
 
-    /* Uma segunda lista de processos "ativos" recebe a cópia da primeira, então a 
-       segunda lista é ordenada levando em consideração o tempo de chegada dos processos */
-    std::vector <Processo> listaProcessoAtivo = listaProcesso;
-    std::sort(listaProcessoAtivo.begin(), listaProcessoAtivo.end(), ComparaProcessoChegada);
+    /* Ordena a lista de processos com base no tempo de chegada */
+    std::sort(listaProcesso.begin(), listaProcesso.end(), ComparaProcessoChegada);
 
-    /* Um loop que percorre a lista de processos "ativos" e vai somando os tempos de
-       resposta, retorno e espera totais */
-    while(listaProcessoAtivo.size() != 0){
+    /* Enquanto houverem processos para serem avaliados */
+    while(listaProcesso.size() != 0){
 
-        Processo aux = listaProcessoAtivo[0];
-        listaProcessoAtivo.erase(listaProcessoAtivo.begin());
+        /* Retira o primeiro processo da lista */
+        Processo aux = listaProcesso[0];
+        listaProcesso.erase(listaProcesso.begin());
 
+        /* Atualiza o tempo executado caso o tempo de chegada do próximo processo
+           seja maior do que o tempo executado atualmente */
         if(aux.tempoChegada > tempoExecutado){
             tempoExecutado = aux.tempoChegada;
         }
 
+        /* Atualiza os valores dos tempos de acordo */
         tempoRespostaTotal += (tempoExecutado - aux.tempoChegada);
         tempoEsperaTotal += (tempoExecutado - aux.tempoChegada);
         tempoRetornoTotal += (tempoExecutado + aux.tempoDuracao - aux.tempoChegada);
@@ -58,7 +55,7 @@ void Escalonador::FCFS(std::vector <Processo> listaProcesso){
 
     }
 
-    /* Apresenta no console os resultados */
+    /* Calcula os resultados e os apresenta no console */
     this->tempoRespostaMedio = ((float) tempoRespostaTotal) / ((float)numProcessos);
     this->tempoRetornoMedio = ((float) tempoRetornoTotal) / ((float)numProcessos);
     this->tempoEsperaMedio = ((float) tempoEsperaTotal) / ((float)numProcessos);
@@ -68,11 +65,7 @@ void Escalonador::FCFS(std::vector <Processo> listaProcesso){
 
 }
 
-/* Método do algoritmo de escalonamento SJF (Shortest Job First), recebe
-   uma lista de objetos do tipo Processo, trabalha em cima dos dados, e ao fim
-   gera os valores de tempo de resposta médio, tempo de retorno médio e tempo de
-   espera médio, salva esses valores nos atributos da classe e imprime esses
-   resultados com cout */
+/* Método do algoritmo de escalonamento SJF (Shortest Job First) */
 void Escalonador::SJF(std::vector <Processo> listaProcesso){
 
     int tempoRetornoTotal = 0;
@@ -81,24 +74,15 @@ void Escalonador::SJF(std::vector <Processo> listaProcesso){
     int tempoExecutado = 0;
     const int numProcessos = listaProcesso.size();
 
-    std::vector <Processo> listaProcessoAtivo;
+    /* Criada uma lista de processos para servir como a fila de processos prontos */
+    std::vector <Processo> filaPronto;
 
-    /* Percorre a lista de processos e remove todos os processos com tempo
-       de chegada igual a 0 e os coloca na lista de processos "ativos" */
-    for(int i = 0; i < listaProcesso.size(); i++){
-        if(listaProcesso[i].tempoChegada == 0){
-            listaProcessoAtivo.push_back(listaProcesso[i]);
-            listaProcesso.erase(listaProcesso.begin()+i);
-            i--;
-        }
-    }
+    /* Enquanto houverem processos para serem avaliados */
+    while(filaPronto.size() > 0 || listaProcesso.size() > 0){
 
-    /* Percorre as duas listas até não existir mais nenhum processo */
-    while(listaProcessoAtivo.size() > 0 || listaProcesso.size() > 0){
-
-	/* Caso não tenha nenhum processo "ativo" é necessário encontrar o 
+	      /* Caso não tenha nenhum processo pronto é necessário encontrar o
            menor tempo de chegada e adicionar ao tempo executado */
-        if(listaProcessoAtivo.size() == 0 && listaProcesso.size() > 0){
+        if(filaPronto.size() == 0){
 
            int menorTempoChegada = INT_MAX;
 
@@ -112,36 +96,34 @@ void Escalonador::SJF(std::vector <Processo> listaProcesso){
                tempoExecutado = menorTempoChegada;
         }
 
-	
+
        /* Percorre a lista de processos, retira todos os processos que tem
           o tempo de chegada menor ou igual ao tempo executado e os coloca
-          na lista de processos "ativos"  */
+          na lista de processos prontos  */
        for(int i = 0; i < listaProcesso.size(); i++){
            if(listaProcesso[i].tempoChegada <= tempoExecutado){
-               listaProcessoAtivo.push_back(listaProcesso[i]);
+               filaPronto.push_back(listaProcesso[i]);
                listaProcesso.erase(listaProcesso.begin()+i);
                i--;
            }
        }
 
-       /* Ordena a lista de processos "ativos" com base no tempo de duração*/
-       std::sort(listaProcessoAtivo.begin(), listaProcessoAtivo.end(), ComparaProcessoDuracao);
+       /* Ordena a lista de processos prontos com base no tempo de duração*/
+       std::sort(filaPronto.begin(), filaPronto.end(), ComparaProcessoDuracao);
 
-       /* Passa para uma variável auxiliar o processo com menor tempo de duração */
-       Processo aux = listaProcessoAtivo[0];
-       listaProcessoAtivo.erase(listaProcessoAtivo.begin());
+       /* Retira o primeiro processo da lista de processos prontos */
+       Processo aux = filaPronto[0];
+       filaPronto.erase(filaPronto.begin());
 
+       /* Atualiza os valores dos tempos de acordo */
        tempoRespostaTotal += (tempoExecutado - aux.tempoChegada);
-
        tempoEsperaTotal += (tempoExecutado - aux.tempoChegada);
-
        tempoRetornoTotal += (tempoExecutado + aux.tempoDuracao - aux.tempoChegada);
-
        tempoExecutado += aux.tempoDuracao;
 
     }
 
-    /* Apresenta no console os resultados */
+    /* Calcula os resultados e os apresenta no console */
     this->tempoRespostaMedio =((float)tempoRespostaTotal) / ((float)numProcessos);
     this->tempoRetornoMedio = ((float)tempoRetornoTotal) / ((float)numProcessos);
     this->tempoEsperaMedio = ((float)tempoEsperaTotal) / ((float)numProcessos);
@@ -150,11 +132,7 @@ void Escalonador::SJF(std::vector <Processo> listaProcesso){
             << " " << this->tempoEsperaMedio << std::endl;
 }
 
-/* Método do algoritmo de escalonamento RR (Round Robin) com quantum = 2, recebe
-   uma lista de objetos do tipo Processo, trabalha em cima dos dados, e ao fim
-   gera os valores de tempo de resposta médio, tempo de retorno médio e tempo de
-   espera médio, salva esses valores nos atributos da classe e imprime esses
-   resultados com cout */
+/* Método do algoritmo de escalonamento RR (Round Robin) com quantum = 2 */
 void Escalonador::RR(std::vector <Processo> listaProcesso){
 
     int tempoRetornoTotal = 0;
@@ -163,43 +141,44 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
     int tempoExecutado = 0;
     const int numProcessos = listaProcesso.size();
 
-    std::vector <Processo> listaProcessoAtivo;
+    /* Criada uma lista de processos para servir como a fila de processos prontos */
+    std::vector <Processo> filaPronto;
 
     /* Ordena a lista de processos com base no tempo de chegada */
     std::sort(listaProcesso.begin(), listaProcesso.end(), ComparaProcessoChegada);
 
-    /* Percorre as duas listas até não existir mais nenhum processo */
-    while(listaProcessoAtivo.size() > 0 || listaProcesso.size() > 0){
+    /* Enquanto houverem processos para serem avaliados */
+    while(filaPronto.size() > 0 || listaProcesso.size() > 0){
 
-	/* Caso não tenha nenhum processo "ativo", adiciona o menor tempo de 
+	      /* Caso não tenha nenhum processo pronto, adiciona o menor tempo de
            chegada como tempo executado */
-        if(listaProcessoAtivo.size() == 0 && listaProcesso.size() > 0){
+        if(filaPronto.size() == 0){
 
             tempoExecutado = listaProcesso[0].tempoChegada;
 
         }
 
-	/* Adiciona à lista de processos "ativos" todos os processos com tempo
+	      /* Adiciona à lista de processos prontos todos os processos com tempo
            de chegada menor ou igual ao tempo executado */
         for(int i = 0; i < listaProcesso.size(); i++){
             if(listaProcesso[i].tempoChegada <= tempoExecutado){
-                listaProcessoAtivo.push_back(listaProcesso[i]);
+                filaPronto.push_back(listaProcesso[i]);
                 listaProcesso.erase(listaProcesso.begin()+i);
                 i--;
             }
         }
 
-	/* Cria uma variável auxiliar e pega o primeiro processo ativo */
-        Processo aux = listaProcessoAtivo[0];
-        listaProcessoAtivo.erase(listaProcessoAtivo.begin());
+	      /* Retira o primeiro processo da lista de processos prontos */
+        Processo aux = filaPronto[0];
+        filaPronto.erase(filaPronto.begin());
 
-	/* Se o processo ativo não tiver sido processado nem uma vez ainda, 
-	   aumenta o valor do tempo de resposta */
+	      /* Se o processo não tiver sido processado nem uma vez ainda,
+	         aumenta o valor do tempo de resposta */
         if(aux.tempoProcessado == 0){
             tempoRespostaTotal += (tempoExecutado - aux.tempoChegada);
         }
 
-	/* Se o processo estiver precisando de menos do que o valor de quantum
+	      /* Se o processo estiver precisando de menos do que o valor de quantum
            para terminar de ser processado, aumentar adequadamente os valores
            de tempo executado e tempo processado */
         if((aux.tempoDuracao - aux.tempoProcessado) < quantum){
@@ -207,7 +186,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
             tempoExecutado += (aux.tempoDuracao - aux.tempoProcessado);
             aux.tempoProcessado += (aux.tempoDuracao - aux.tempoProcessado);
 
-	/* Senao, apenas processe o tempo de quantum desse processo */
+	      /* Senao, apenas processe o tempo de quantum desse processo */
         }else{
 
             aux.tempoProcessado += quantum;
@@ -215,7 +194,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
 
         }
 
-	/* Caso o processo tenha sido completamente processado, atualizar as informações
+	      /* Caso o processo tenha sido completamente processado, atualizar as informações
            de tempo de retorno e espera */
         if(aux.tempoProcessado == aux.tempoDuracao){
 
@@ -223,24 +202,24 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
             tempoEsperaTotal += tempoExecutado - aux.tempoChegada - aux.tempoDuracao;
 
 
-	/* Caso o processo não tenha sido completamente processado, adicionar a lista de processos
-           ativos todos os processos que possam ter chegado após a execução do tempo do quantum,
-           por fim, adicionar o processo não finalizado de volta para a lista de processos ativos*/
+	      /* Caso o processo não tenha sido completamente processado, adicionar a lista de processos
+           prontos todos os processos que possam ter chegado após a execução do tempo do quantum,
+           e por fim, adicionar o processo não finalizado no fim lista de processos prontos */
         }else{
 
             for(int i = 0; i < listaProcesso.size(); i++){
                 if(listaProcesso[i].tempoChegada <= tempoExecutado){
-                    listaProcessoAtivo.push_back(listaProcesso[i]);
+                    filaPronto.push_back(listaProcesso[i]);
                     listaProcesso.erase(listaProcesso.begin()+i);
                     i--;
                 }
             }
 
-            listaProcessoAtivo.push_back(aux);
+            filaPronto.push_back(aux);
         }
     }
 
-    /* Apresenta no console os resultados */
+    /* Calcula os resultados e os apresenta no console */
     this->tempoRespostaMedio =((float)tempoRespostaTotal) / ((float)numProcessos);
     this->tempoRetornoMedio = ((float)tempoRetornoTotal) / ((float)numProcessos);
     this->tempoEsperaMedio = ((float)tempoEsperaTotal) / ((float)numProcessos);
