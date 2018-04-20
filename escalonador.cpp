@@ -80,7 +80,7 @@ void Escalonador::SJF(std::vector <Processo> listaProcesso){
     /* Enquanto houverem processos para serem avaliados */
     while(filaPronto.size() > 0 || listaProcesso.size() > 0){
 
-	      /* Caso não tenha nenhum processo pronto é necessário encontrar o
+	/* Caso não tenha nenhum processo pronto é necessário encontrar o
            menor tempo de chegada e adicionar ao tempo executado */
         if(filaPronto.size() == 0){
 
@@ -150,7 +150,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
     /* Enquanto houverem processos para serem avaliados */
     while(filaPronto.size() > 0 || listaProcesso.size() > 0){
 
-	      /* Caso não tenha nenhum processo pronto, adiciona o menor tempo de
+	/* Caso não tenha nenhum processo pronto, adiciona o menor tempo de
            chegada como tempo executado */
         if(filaPronto.size() == 0){
 
@@ -158,7 +158,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
 
         }
 
-	      /* Adiciona à lista de processos prontos todos os processos com tempo
+	/* Adiciona à lista de processos prontos todos os processos com tempo
            de chegada menor ou igual ao tempo executado */
         for(int i = 0; i < listaProcesso.size(); i++){
             if(listaProcesso[i].tempoChegada <= tempoExecutado){
@@ -168,17 +168,17 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
             }
         }
 
-	      /* Retira o primeiro processo da lista de processos prontos */
+	/* Retira o primeiro processo da lista de processos prontos */
         Processo aux = filaPronto[0];
         filaPronto.erase(filaPronto.begin());
 
-	      /* Se o processo não tiver sido processado nem uma vez ainda,
-	         aumenta o valor do tempo de resposta */
+	/* Se o processo não tiver sido processado nem uma vez ainda,
+	   aumenta o valor do tempo de resposta */
         if(aux.tempoProcessado == 0){
             tempoRespostaTotal += (tempoExecutado - aux.tempoChegada);
         }
 
-	      /* Se o processo estiver precisando de menos do que o valor de quantum
+	/* Se o processo estiver precisando de menos do que o valor de quantum
            para terminar de ser processado, aumentar adequadamente os valores
            de tempo executado e tempo processado */
         if((aux.tempoDuracao - aux.tempoProcessado) < quantum){
@@ -186,7 +186,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
             tempoExecutado += (aux.tempoDuracao - aux.tempoProcessado);
             aux.tempoProcessado += (aux.tempoDuracao - aux.tempoProcessado);
 
-	      /* Senao, apenas processe o tempo de quantum desse processo */
+	/* Senao, apenas processe o tempo de quantum desse processo */
         }else{
 
             aux.tempoProcessado += quantum;
@@ -194,7 +194,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
 
         }
 
-	      /* Caso o processo tenha sido completamente processado, atualizar as informações
+	/* Caso o processo tenha sido completamente processado, atualizar as informações
            de tempo de retorno e espera */
         if(aux.tempoProcessado == aux.tempoDuracao){
 
@@ -202,7 +202,7 @@ void Escalonador::RR(std::vector <Processo> listaProcesso){
             tempoEsperaTotal += tempoExecutado - aux.tempoChegada - aux.tempoDuracao;
 
 
-	      /* Caso o processo não tenha sido completamente processado, adicionar a lista de processos
+	/* Caso o processo não tenha sido completamente processado, adicionar a lista de processos
            prontos todos os processos que possam ter chegado após a execução do tempo do quantum,
            e por fim, adicionar o processo não finalizado no fim lista de processos prontos */
         }else{
